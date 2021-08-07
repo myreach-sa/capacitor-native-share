@@ -1,10 +1,9 @@
 import { WebPlugin } from '@capacitor/core';
 
-import type { NativeSharePlugin } from './definitions';
+import type { NativeShareItem, NativeSharePlugin } from './definitions';
 
 export class NativeShareWeb extends WebPlugin implements NativeSharePlugin {
-  async echo(options: { value: string }): Promise<{ value: string }> {
-    console.log('ECHO', options);
-    return options;
+  getSharedItems(): Promise<NativeShareItem[]> {
+    return new Promise<NativeShareItem[]>(res => res([]));
   }
 }

@@ -1,8 +1,10 @@
 package ch.rea.plugins.nativeshare;
 
+import com.getcapacitor.JSObject;
+
 public class NativeShare {
 
-    public String echo(String value) {
-        return value;
+    public JSObject getSharedItems() {
+        return new JSObject();
     }
 }
