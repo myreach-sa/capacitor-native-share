@@ -1,29 +1,43 @@
+import type { PluginListenerHandle } from '@capacitor/core';
+
 export interface NativeShareItem {
-  /**
-   * The text shared. It can also be a website.
-   */
-  text: string;
+	/**
+	 * The text shared. It can also be a website.
+	 */
+	text: string;
 
-  /**
-   * The URL of a shared website.
-   * Sometimes it is places in the {@link NativeShareItem.text text} field.
-   */
-  website: string;
+	/**
+	 * The uri (path) to the shared file.
+	 */
+	uri: string;
 
-  /**
-   * The uri (path) to the shared file.
-   */
-  uri: string;
-
-  /**
-   * The mimeType of the shared file.
-   */
-  mimeType: string;
+	/**
+	 * The mimeType of the shared file.
+	 */
+	mimeType: string;
 }
 
+export enum NativeShareEventType {
+	SHARE_RECEIVED = 'sharedReceived',
+}
+
+export interface NativeShareShareReceived {
+	items: { [idx: string]: NativeShareItem };
+	length: number;
+}
+
+export type NativeShareItemHandlerShareReceivedHandler = (
+	event: NativeShareShareReceived
+) => void;
+
+export type NativeShareItemHandlerShareReceivedListener = (
+	eventName: NativeShareEventType.SHARE_RECEIVED,
+	handler: NativeShareItemHandlerShareReceivedHandler
+) => Promise<PluginListenerHandle>;
+
+export type NativeShareListenerHandler = NativeShareItemHandlerShareReceivedListener;
+
 export interface NativeSharePlugin {
-  /**
-   * Returns a list of the shared items.
-   */
-  getSharedItems(): Promise<NativeShareItem[]>;
+	addListener: NativeShareListenerHandler;
+	getLastSharedItems: () => Promise<NativeShareShareReceived>;
 }

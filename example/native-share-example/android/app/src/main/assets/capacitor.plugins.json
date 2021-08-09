@@ -1,0 +1,6 @@
+[
+	{
+		"pkg": "@rea.ch/capacitor-native-share",
+		"classpath": "ch.rea.plugins.nativeshare.NativeSharePlugin"
+	}
+]

@@ -1,30 +1,52 @@
 package ch.rea.plugins.nativeshare;
 
 import android.content.Intent;
-import android.util.Log;
-
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
-@CapacitorPlugin(
-    name = "NativeShare"
-)
+@CapacitorPlugin(name = "NativeShare")
 public class NativeSharePlugin extends Plugin {
+
+	private JSObject lastSharedItems = null;
 
     private final NativeShare implementation = new NativeShare();
 
-    @PluginMethod
-    public void getSharedItems(PluginCall call) {
-        JSObject ret = implementation.getSharedItems();
-        call.resolve(ret);
-    }
+	@PluginMethod()
+	public void getLastSharedItems(PluginCall call) {
+		if (this.lastSharedItems != null) {
+			call.resolve(this.lastSharedItems);
+		} else {
+			call.reject("No shared detected");
+		}
+	}
 
     @Override
     protected void handleOnNewIntent(Intent intent) {
         String action = intent.getAction();
-        Log.d("Intent", action);
+        switch (action) {
+            case Intent.ACTION_SEND:
+                this.notifyEvent(implementation.handleSendIntent(intent));
+                break;
+            case Intent.ACTION_SEND_MULTIPLE:
+                this.notifyEvent(implementation.handleSendMultipleIntent(intent));
+                break;
+        }
+    }
+
+    protected void notifyEvent(JSObject[] items) {
+		int length = items.length;
+        JSObject notification = new JSObject();
+        JSObject itemsSend = new JSObject();
+		for (int i = 0; i < length; i++) {
+			itemsSend.put("" + i, items[i]);
+		}
+		notification.put("length", length);
+        notification.put("items", itemsSend);
+        notifyListeners("sharedReceived", notification);
+
+        this.lastSharedItems = notification;
     }
 }
