@@ -1,9 +1,11 @@
-//
-//  NativeShareStore.swift
-//  Plugin
-//
-//  Created by Raúl Ibáñez Pérez on 9/8/21.
-//  Copyright © 2021 Max Lynch. All rights reserved.
-//
-
 import Foundation
+
+public final class NativeShareStore {
+    public var items: [NativeShareItem] = []
+    
+    public static let store = NativeShareStore()
+    
+    public init() {
+        self.items = []
+    }
+}

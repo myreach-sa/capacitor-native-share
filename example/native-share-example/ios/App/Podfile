@@ -9,9 +9,14 @@ install! 'cocoapods', :disable_input_output_paths => true
 def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
+  pod 'Rea.chCapacitorNativeShare', :path => '../../../..'
 end
 
 target 'App' do
   capacitor_pods
   # Add your Pods here
+end
+
+target 'native-share-share-extension' do
+  capacitor_pods
 end

@@ -9,10 +9,11 @@ import Capacitor
 public class NativeSharePlugin: CAPPlugin {
     private let implementation = NativeShare()
 
-    @objc func echo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
-        call.resolve([
-            "value": implementation.echo(value)
-        ])
+    @objc func getLastSharedItems(_ call: CAPPluginCall) {
+        do {
+            try call.resolve(implementation.getLastSharedItems())
+        } catch {
+            call.reject("No shared detected")
+        }
     }
 }

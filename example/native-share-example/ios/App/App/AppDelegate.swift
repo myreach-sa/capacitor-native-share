@@ -36,7 +36,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         // Called when the app was launched with a url. Feel free to add additional processing here,
         // but if you want the App API to support tracking app url opens, make sure to keep this call
-        return ApplicationDelegateProxy.shared.application(app, open: url, options: options)
+        let success: Bool = ApplicationDelegate.shared.application(app, open: url, options: options)
+
+        guard let components = NSURLComponents(url: url, resolvingAgainstBaseURL: true),
+            let params = components.queryItems else {
+                return false
+        }
+        
+        store.text = params.first(where: { $0.name == "text" })?.value as! String
+        store.url = params.first(where: { $0.name == "url" })?.value as! String
+        store.image = params.first(where: { $0.name == "image" })?.value as! String
+        store.file = params.first(where: { $0.name == "file" })?.value?.removingPercentEncoding as! String
+        store.processed = false
+        
+        let nc = NotificationCenter.default
+        nc.post(name: Notification.Name("triggerSendIntent"), object: nil )
+
+        return success
     }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {

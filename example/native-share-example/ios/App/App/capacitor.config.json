@@ -1,1 +1,6 @@
-{}
+{
+	"appId": "ch.rea.plugins.nativeshareexample",
+	"appName": "native-share-example",
+	"webDir": "dist/native-share-example",
+	"bundledWebRuntime": false
+}
