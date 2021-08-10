@@ -16,9 +16,10 @@
 		50ADFFA42020D75100D50D53 /* Capacitor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50ADFFA52020D75100D50D53 /* Capacitor.framework */; };
 		50ADFFA82020EE4F00D50D53 /* NativeSharePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 50ADFFA72020EE4F00D50D53 /* NativeSharePlugin.m */; };
 		50E1A94820377CB70090CE1A /* NativeSharePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1A94720377CB70090CE1A /* NativeSharePlugin.swift */; };
-		C48E069F26C18FF00031B4BC /* NativeShareItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E069E26C18FF00031B4BC /* NativeShareItem.swift */; };
-		C48E06A126C190280031B4BC /* NativeShareStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E06A026C190280031B4BC /* NativeShareStore.swift */; };
-		C48E06A326C1950F0031B4BC /* NativeShareExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C48E06A226C1950F0031B4BC /* NativeShareExtension.swift */; };
+		9DD953C326C2B5DA00A37B37 /* NativeShareItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD953BF26C2B5DA00A37B37 /* NativeShareItem.swift */; };
+		9DD953C426C2B5DA00A37B37 /* NativeShareExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD953C026C2B5DA00A37B37 /* NativeShareExtension.swift */; };
+		9DD953C526C2B5DA00A37B37 /* NativeShareStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD953C126C2B5DA00A37B37 /* NativeShareStore.swift */; };
+		9DD953C626C2B5DA00A37B37 /* NativeShareDelegateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD953C226C2B5DA00A37B37 /* NativeShareDelegateUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,9 +47,10 @@
 		5E23F77F099397094342571A /* Pods-Plugin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.debug.xcconfig"; sourceTree = "<group>"; };
 		91781294A431A2A7CC6EB714 /* Pods-Plugin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Plugin.release.xcconfig"; path = "Pods/Target Support Files/Pods-Plugin/Pods-Plugin.release.xcconfig"; sourceTree = "<group>"; };
 		96ED1B6440D6672E406C8D19 /* Pods-PluginTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.debug.xcconfig"; sourceTree = "<group>"; };
-		C48E069E26C18FF00031B4BC /* NativeShareItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeShareItem.swift; sourceTree = "<group>"; };
-		C48E06A026C190280031B4BC /* NativeShareStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeShareStore.swift; sourceTree = "<group>"; };
-		C48E06A226C1950F0031B4BC /* NativeShareExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeShareExtension.swift; sourceTree = "<group>"; };
+		9DD953BF26C2B5DA00A37B37 /* NativeShareItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeShareItem.swift; sourceTree = "<group>"; };
+		9DD953C026C2B5DA00A37B37 /* NativeShareExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeShareExtension.swift; sourceTree = "<group>"; };
+		9DD953C126C2B5DA00A37B37 /* NativeShareStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeShareStore.swift; sourceTree = "<group>"; };
+		9DD953C226C2B5DA00A37B37 /* NativeShareDelegateUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NativeShareDelegateUtils.swift; sourceTree = "<group>"; };
 		F65BB2953ECE002E1EF3E424 /* Pods-PluginTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PluginTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PluginTests/Pods-PluginTests.release.xcconfig"; sourceTree = "<group>"; };
 		F6753A823D3815DB436415E3 /* Pods_PluginTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PluginTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -98,14 +100,15 @@
 		50ADFF8A201F53D600D50D53 /* Plugin */ = {
 			isa = PBXGroup;
 			children = (
+				9DD953C226C2B5DA00A37B37 /* NativeShareDelegateUtils.swift */,
+				9DD953C026C2B5DA00A37B37 /* NativeShareExtension.swift */,
+				9DD953BF26C2B5DA00A37B37 /* NativeShareItem.swift */,
+				9DD953C126C2B5DA00A37B37 /* NativeShareStore.swift */,
 				50E1A94720377CB70090CE1A /* NativeSharePlugin.swift */,
 				2F98D68124C9AAE400613A4C /* NativeShare.swift */,
 				50ADFF8B201F53D600D50D53 /* NativeSharePlugin.h */,
 				50ADFFA72020EE4F00D50D53 /* NativeSharePlugin.m */,
 				50ADFF8C201F53D600D50D53 /* Info.plist */,
-				C48E069E26C18FF00031B4BC /* NativeShareItem.swift */,
-				C48E06A026C190280031B4BC /* NativeShareStore.swift */,
-				C48E06A226C1950F0031B4BC /* NativeShareExtension.swift */,
 			);
 			path = Plugin;
 			sourceTree = "<group>";
@@ -315,11 +318,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C48E06A326C1950F0031B4BC /* NativeShareExtension.swift in Sources */,
+				9DD953C426C2B5DA00A37B37 /* NativeShareExtension.swift in Sources */,
+				9DD953C626C2B5DA00A37B37 /* NativeShareDelegateUtils.swift in Sources */,
 				50E1A94820377CB70090CE1A /* NativeSharePlugin.swift in Sources */,
-				C48E069F26C18FF00031B4BC /* NativeShareItem.swift in Sources */,
-				C48E06A126C190280031B4BC /* NativeShareStore.swift in Sources */,
+				9DD953C326C2B5DA00A37B37 /* NativeShareItem.swift in Sources */,
 				2F98D68224C9AAE500613A4C /* NativeShare.swift in Sources */,
+				9DD953C526C2B5DA00A37B37 /* NativeShareStore.swift in Sources */,
 				50ADFFA82020EE4F00D50D53 /* NativeSharePlugin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

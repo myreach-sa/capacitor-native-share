@@ -8,11 +8,15 @@ body {
 	height: 100%;
 }
 
-body {
+html {
 	padding:
-		env(--safe-area-inset-top, 0px)
-		env(--safe-area-inset-right, 0px)
-		env(--safe-area-inset-bottom, 0px)
-		env(--safe-area-inset-left, 0px);
+		env(safe-area-inset-top, 0px)
+		env(safe-area-inset-right, 0px)
+		env(safe-area-inset-bottom, 0px)
+		env(safe-area-inset-left, 0px);
 	box-sizing: border-box;
+}
+
+body {
+	position: relative;
 }

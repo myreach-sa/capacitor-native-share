@@ -18,5 +18,6 @@ target 'App' do
 end
 
 target 'native-share-share-extension' do
-  capacitor_pods
+  # We need this to override the extension class
+  pod 'Rea.chCapacitorNativeShare', :path => '../../../..'
 end

@@ -11,7 +11,7 @@ Override this function with the URL Extension of your app.
 [More info](https://developer.apple.com/documentation/xcode/defining-a-custom-url-scheme-for-your-app)
      */
     open func getContainerAppUrlExtension() -> String {
-        preconditionFailure("Override this function")
+        return "ReachCapacitorNativeShareExample"
     }
 
     open override func didSelectPost() {
@@ -20,6 +20,9 @@ Override this function with the URL Extension of your app.
         self.items.forEach { item in
             urlString = item.addItemsToString(urlString)
         }
+        
+        print(urlString)
+        
         let url = URL(string: urlString)!
         _ = openURL(url)
         self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)

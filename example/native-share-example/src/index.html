@@ -4,7 +4,7 @@
 		<meta charset="utf-8" />
 		<title>NativeShareExample</title>
 		<base href="/" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 		<link rel="icon" type="image/x-icon" href="favicon.ico" />
 	</head>
 	<body>
@@ -14,7 +14,7 @@
 			style="
 				position: fixed;
 				right: 1rem;
-				bottom: 1rem;
+				bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
 				color: #48a1ee;
 				font-weight: bold;
 				text-decoration: none;

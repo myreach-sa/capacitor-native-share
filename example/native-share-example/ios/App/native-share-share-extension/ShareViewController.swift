@@ -1,7 +1,10 @@
+import UIKit
+import Social
+import MobileCoreServices
 import ReachCapacitorNativeShare
 
 class ShareViewController: NativeShareExtension {
-    public override func getContainerAppUrlExtension() -> String {
+    override func getContainerAppUrlExtension() -> String {
         return "ReachCapacitorNativeShareExample"
     }
 }

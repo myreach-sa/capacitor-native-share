@@ -98,12 +98,14 @@ There are some special setup that needs to be done in iOS:
 
 ### Interfaces
 
+
 #### NativeShareShareReceived
 
 | Prop         | Type                                                                            |
 | ------------ | ------------------------------------------------------------------------------- |
 | **`items`**  | <code>{ [idx: string]: <a href="#nativeshareitem">NativeShareItem</a>; }</code> |
 | **`length`** | <code>number</code>                                                             |
+
 
 #### NativeShareItem
 
