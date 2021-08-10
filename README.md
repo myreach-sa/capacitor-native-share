@@ -81,9 +81,72 @@ There are some special setup that needs to be done in iOS:
 
 ### App Extension
 
+[Create an App Share Extension](https://developer.apple.com/library/archive/documentation/General/Conceptual/ExtensibilityPG/ExtensionCreation.html#//apple_ref/doc/uid/TP40014214-CH5-SW1).
+
+
+### Modify your Podfile
+
+You need to modify your **`Podfile`** to include a library to your extension:
+
+```diff
+...
+target 'App' do
+  capacitor_pods
+  # Add your Pods here
+end
+
++ target 'YOUR_SHARE_EXTENSION_NAME' do
++   # We need this to override the extension class
++   pod 'Rea.chCapacitorNativeShare', :path => '../../node_modules/@rea.ch/capacitor-share-extension'
++ end
+
+```
+
 ### Override extension class
 
+Extend the class `NativeShareExtension` in your extension's **`ShareViewController.swift`** and override the function `getContainerAppUrlExtension` so it returns your App's Url Scheme ([tutorial](https://developer.apple.com/documentation/xcode/defining-a-custom-url-scheme-for-your-app)).
+
+```swift
+import UIKit
+import Social
+import MobileCoreServices
+import ReachCapacitorNativeShare
+
+class ShareViewController: NativeShareExtension {
+    override func getContainerAppUrlExtension() -> String {
+        return "ReachCapacitorNativeShareExample"
+    }
+}
+```
+
 ### Override AppDelegate class
+
+Modify your **`AppDelegate.swift`** with the following
+
+```swift
+import ReachCapacitorNativeShare
+
+// ...
+
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    // ...
+    
+    var store: NativeShareStore = NativeShareStore.store
+
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+        let success: Bool = ApplicationDelegateProxy.shared.application(app, open: url, options: options)
+
+        let nativeShareHandlerSuccess = NativeShareDelegateUtils.handleApplicationUrl(app: app, url: url, store: store)
+
+        return success && nativeShareHandlerSuccess
+    }
+
+	// ...
+}
+
+```
 
 ## API
 
