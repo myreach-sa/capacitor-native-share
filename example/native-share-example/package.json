@@ -21,7 +21,7 @@
 		"@capacitor/android": "^3.1.2",
 		"@capacitor/core": "^3.1.2",
 		"@capacitor/ios": "^3.1.2",
-		"@rea.ch/capacitor-native-share": "^1.0.0",
+		"@rea.ch/capacitor-native-share": "file:../..",
 		"rxjs": "~6.6.0",
 		"tslib": "^2.3.0",
 		"zone.js": "~0.11.4"
