@@ -1,16 +1,27 @@
-public class NativeShareItem {
+import Foundation
+
+@objc
+public class NativeShareItem: NSObject {
+    @objc
     public var text: String = ""
+    
+    @objc
     public var uri: String = ""
+    
+    @objc
     public var mimeType: String = ""
     
-    public init() {}
+    @objc
+    public override init() {}
     
+    @objc
     public init(text: String = "", uri: String = "", mimeType: String = "") {
         self.text = text
         self.uri = uri
         self.mimeType = mimeType
     }
     
+    @objc
     public func addItemsToString(_ url: String) -> String {
         var ret: String = url
         ret = self.addParamToUrl(url: ret, param: "reachCNS_text", value: self.text)

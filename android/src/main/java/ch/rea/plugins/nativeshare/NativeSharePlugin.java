@@ -23,6 +23,12 @@ public class NativeSharePlugin extends Plugin {
 		}
 	}
 
+    @PluginMethod()
+    public void clear(PluginCall call) {
+        this.lastSharedItems = null;
+        call.resolve(new JSObject());
+    }
+
     @Override
     protected void handleOnNewIntent(Intent intent) {
         String action = intent.getAction();

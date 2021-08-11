@@ -1,8 +1,9 @@
 import UIKit
 import Social
 import MobileCoreServices
+import Foundation
 
-open class NativeShareExtension: SLComposeServiceViewController {
+@objc open class NativeShareExtension: SLComposeServiceViewController {
     private var items: [NativeShareItem] = []
     
     /**
@@ -10,6 +11,7 @@ Override this function with the URL Extension of your app.
      
 [More info](https://developer.apple.com/documentation/xcode/defining-a-custom-url-scheme-for-your-app)
      */
+    @objc
     open func getContainerAppUrlExtension() -> String {
         return "ReachCapacitorNativeShareExample"
     }

@@ -37,7 +37,30 @@ export type NativeShareItemHandlerShareReceivedListener = (
 
 export type NativeShareListenerHandler = NativeShareItemHandlerShareReceivedListener;
 
+
+export interface NativeShareGetItemsOptions {
+	/**
+	 * Whether to remove the share event so if you call {@link NativeSharePlugin.getLastSharedItems} again it will return void.
+	 * 
+	 * Default: `true`.
+	 */
+	autoRemove?: boolean;
+}
 export interface NativeSharePlugin {
+	/**
+	 * Adds a listener to the plugin.
+	 */
 	addListener: NativeShareListenerHandler;
-	getLastSharedItems: () => Promise<NativeShareShareReceived>;
+
+	/**
+	 * Gets the last shared items. It is used in case the shared was received while the app was not active, and therefore the listener was not placed.
+	 * 
+	 * This must only be used once, and before adding the listener.
+	 */
+	getLastSharedItems: (options?: Partial<NativeShareGetItemsOptions>) => Promise<NativeShareShareReceived>;
+
+	/**
+	 * Removed the stored share.
+	 */
+	clear: () => Promise<void>;
 }

@@ -20,4 +20,10 @@ export class NativeShareWeb extends WebPlugin implements NativeSharePlugin {
 			reject('Web not supported');
 		});
 	}
+
+	clear(): Promise<void> {
+		return new Promise<void>((resolve) => {
+			resolve();
+		})
+	}
 }

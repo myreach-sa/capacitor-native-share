@@ -1,9 +1,12 @@
 import UIKit
+import Foundation
 
-public class NativeShareDelegateUtils {
+@objc public class NativeShareDelegateUtils: NSObject {
+    @objc
     public static func handleApplicationUrl(app: UIApplication, url: URL, store: NativeShareStore) -> Bool {
         guard let components = NSURLComponents(url: url, resolvingAgainstBaseURL: true),
               let params = components.queryItems else {
+            print("params not found")
             return false
         }
         

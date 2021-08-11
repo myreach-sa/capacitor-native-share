@@ -20,6 +20,8 @@ import {
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit, OnDestroy {
+	public log = '';
+	public logArr: string[] = [];
 	public eventData = 'Nothing received';
 
 	private listener?: PluginListenerHandle;
@@ -27,13 +29,25 @@ export class AppComponent implements OnInit, OnDestroy {
 	constructor(private readonly cdRef: ChangeDetectorRef, private readonly ngZone: NgZone) {}
 
 	async ngOnInit(): Promise<void> {
+		this.addToLog('onInit')
+
 		NativeShare.getLastSharedItems()
-			.then(this.handleShare.bind(this))
-			.catch(console.error);
+			.then((ev) => {
+				this.addToLog("getLastSharedItems");
+				this.handleShare(ev);
+			})
+			.catch((error) => {
+				this.addToLog('getLastSharedItems error');
+				this.addToLog(error);
+				console.error(error);
+			});
 
 		this.listener = await NativeShare.addListener(
 			NativeShareEventType.SHARE_RECEIVED,
-			this.handleShare.bind(this)
+			(ev) => {
+				this.addToLog('listener');
+				this.handleShare(ev);
+			}
 		);
 	}
 
@@ -44,7 +58,14 @@ export class AppComponent implements OnInit, OnDestroy {
 	private handleShare(event: NativeShareShareReceived): void {
 		this.ngZone.run(() => {
 			this.eventData = JSON.stringify(event, null, 4);
+			this.addToLog('handleShre');
 			this.cdRef.detectChanges();
 		});
+	}
+
+	private addToLog(item: string): void {
+		this.logArr.push(item);
+		this.log = JSON.stringify(this.logArr, null, 4);
+		this.cdRef.detectChanges();
 	}
 }

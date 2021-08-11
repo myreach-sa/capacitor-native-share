@@ -1,14 +1,18 @@
 import Foundation
 
-public final class NativeShareStore {
+@objc
+public final class NativeShareStore: NSObject {
+    @objc
     public var items: [NativeShareItem] = []
     
+    @objc
     public static let store = NativeShareStore()
     
-    private init() {
+    private override init() {
         self.items = []
     }
     
+    @objc
     public func getAsDictionary() -> [String: Any] {
         var itemsDictionary: [String: [String: String]] = [:]
         
@@ -27,6 +31,7 @@ public final class NativeShareStore {
         ]
     }
     
+    @objc
     public func clear() -> Void {
         self.items = []
     }

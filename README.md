@@ -148,6 +148,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 ```
 
+### Common errors
+
+#### sharedApplication is unavailable
+> 'sharedApplication' is unavailable: not available on iOS (App Extension) - Use view controller based solutions where appropriate instead.
+
+Uncheck the Pods targets `Capacitor` and `CapacitorCordova`'s `Allow app extension API only` option after every `cap sync` or `pod install`. [ref](https://stackoverflow.com/a/49770189)
+
 ## API
 
 <docgen-index>
@@ -160,6 +167,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
 ### Interfaces
+
+
+#### NativeShareGetItemsOptions
+
+| Prop             | Type                 | Description                                                                                                                               |
+| ---------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| **`autoRemove`** | <code>boolean</code> | Whether to remove the share event so if you call {@link NativeSharePlugin.getLastSharedItems} again it will return void. Default: `true`. |
 
 
 #### NativeShareShareReceived
