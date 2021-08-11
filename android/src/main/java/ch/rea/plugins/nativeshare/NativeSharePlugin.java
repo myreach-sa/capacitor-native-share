@@ -7,6 +7,8 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
+import org.json.JSONException;
+
 @CapacitorPlugin(name = "NativeShare")
 public class NativeSharePlugin extends Plugin {
 
@@ -17,6 +19,16 @@ public class NativeSharePlugin extends Plugin {
 	@PluginMethod()
 	public void getLastSharedItems(PluginCall call) {
 		if (this.lastSharedItems != null) {
+			JSObject options = call.getObject("options");
+			boolean autoremove = false;
+			try {
+				autoremove = options.getBoolean("autoremove");
+			} catch (JSONException ignored) {}
+
+			if (autoremove) {
+				this.lastSharedItems = null;
+			}
+
 			call.resolve(this.lastSharedItems);
 		} else {
 			call.reject("No shared detected");
