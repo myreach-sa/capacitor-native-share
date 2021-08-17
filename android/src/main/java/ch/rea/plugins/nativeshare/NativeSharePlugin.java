@@ -14,8 +14,6 @@ public class NativeSharePlugin extends Plugin {
 
 	private JSObject lastSharedItems = null;
 
-    private final NativeShare implementation = new NativeShare();
-
 	@PluginMethod()
 	public void getLastSharedItems(PluginCall call) {
 		if (this.lastSharedItems != null) {
@@ -46,10 +44,10 @@ public class NativeSharePlugin extends Plugin {
         String action = intent.getAction();
         switch (action) {
             case Intent.ACTION_SEND:
-                this.notifyEvent(implementation.handleSendIntent(intent));
+                this.notifyEvent(NativeShare.handleSendIntent(this.getContext(), intent));
                 break;
             case Intent.ACTION_SEND_MULTIPLE:
-                this.notifyEvent(implementation.handleSendMultipleIntent(intent));
+                this.notifyEvent(NativeShare.handleSendMultipleIntent(this.getContext(), intent));
                 break;
         }
     }
