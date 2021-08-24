@@ -14,14 +14,7 @@ import Foundation
         let mimeTypeList: [String] = params.filter { $0.name == "reachCNS_mimeType" } .map { $0.value ?? "" }
         let uriList: [String] = params.filter { $0.name == "reachCNS_uri" } .map { $0.value ?? "" }
         
-        print("TEXT")
-        textList.forEach { print($0) }
-        
-        print("MIMETYPE")
-        mimeTypeList.forEach { print($0) }
-        
-        print("URI")
-        uriList.forEach { print($0) }
+        store.clear()
         
         for (idx, _) in textList.enumerated() {
             let text = textList[idx]

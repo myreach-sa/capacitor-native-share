@@ -32,14 +32,14 @@ Override this function with the URL Extension of your app.
     
     open override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print(self.extensionContext?.inputItems as Any)
 
         let attachments = (self.extensionContext?.inputItems.first as? NSExtensionItem)?.attachments ?? []
         
         for attachment in attachments {
             
             attachment.loadItem(forTypeIdentifier: kUTTypeURL as String, options: nil, completionHandler: self.urlDataHandler)
+            
+            attachment.loadItem(forTypeIdentifier: kUTTypeItem as String, options: nil, completionHandler: self.urlDataHandler)
             
             attachment.loadItem(forTypeIdentifier: kUTTypeText as String, options: nil, completionHandler:self.textDataHandler)
             
