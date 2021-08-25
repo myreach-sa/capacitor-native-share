@@ -83,6 +83,10 @@ There are some special setup that needs to be done in iOS:
 
 [Create an App Share Extension](https://developer.apple.com/library/archive/documentation/General/Conceptual/ExtensibilityPG/ExtensionCreation.html#//apple_ref/doc/uid/TP40014214-CH5-SW1).
 
+### App Group
+
+[Create an App Group](https://medium.com/macoclock/data-sharing-between-app-and-app-extensions-4ffd95bf87e0) so the extension and the app can share data.
+
 
 ### Modify your Podfile
 
@@ -104,8 +108,11 @@ end
 
 ### Override extension class
 
-Extend the class `NativeShareExtension` in your extension's **`ShareViewController.swift`** and override the function `getContainerAppUrlExtension` so it returns your App's Url Scheme ([tutorial](https://developer.apple.com/documentation/xcode/defining-a-custom-url-scheme-for-your-app)).
+Extend the class `NativeShareExtension` in your extension's **`ShareViewController.swift`** and:
 
+1. override the function `getContainerAppUrlExtension` so it returns your App's Url Scheme ([tutorial](https://developer.apple.com/documentation/xcode/defining-a-custom-url-scheme-for-your-app)).
+
+2. override the function `getAppGroupIdentifier` so it returns yout extension and app's `App Group`'s name.
 ```swift
 import UIKit
 import Social
@@ -115,6 +122,10 @@ import ReachCapacitorNativeShare
 class ShareViewController: NativeShareExtension {
     override func getContainerAppUrlExtension() -> String {
         return "ReachCapacitorNativeShareExample"
+    }
+
+    override func getAppGroupIdentifier() -> String {
+        return "group.ch.rea.plugins.nativeshareexample"
     }
 }
 ```
@@ -134,6 +145,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // ...
     
     var store: NativeShareStore = NativeShareStore.store
+
+	// ...
+
+	func applicationWillTerminate(_ application: UIApplication) {
+        NativeShareDelegateUtils.cleanTemporalFolder( appGroupName: "YOUR_APP_GROUP_NAME" )
+    }
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         let success: Bool = ApplicationDelegateProxy.shared.application(app, open: url, options: options)

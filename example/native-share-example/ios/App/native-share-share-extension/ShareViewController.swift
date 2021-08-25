@@ -7,4 +7,8 @@ class ShareViewController: NativeShareExtension {
     override func getContainerAppUrlExtension() -> String {
         return "ReachCapacitorNativeShareExample"
     }
+    
+    override func getAppGroupIdentifier() -> String {
+        return "group.ch.rea.plugins.nativeshareexample"
+    }
 }

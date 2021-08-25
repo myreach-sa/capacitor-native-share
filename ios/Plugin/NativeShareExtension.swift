@@ -15,6 +15,15 @@ Override this function with the URL Extension of your app.
     open func getContainerAppUrlExtension() -> String {
         return "ReachCapacitorNativeShareExample"
     }
+    
+    @objc
+    open func getAppGroupIdentifier() -> String {
+        return "group.ch.rea.plugins.nativeshareexample"
+    }
+    
+    func getAppGroupUrl() -> URL? {
+        return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: self.getAppGroupIdentifier())
+    }
 
     open override func didSelectPost() {
         let containerAppUrlExtension: String = self.getContainerAppUrlExtension()
@@ -31,13 +40,19 @@ Override this function with the URL Extension of your app.
     }
     
     open override func viewDidLoad() {
+        print("BEFORE SUPER VIEWDIDLOAD")
         super.viewDidLoad()
+        print("AFTER SUPER VIEWDIDLOAD")
 
         let attachments = (self.extensionContext?.inputItems.first as? NSExtensionItem)?.attachments ?? []
         
+        print("ATTACHMENTS")
+        print(attachments as Any)
+        
         for attachment in attachments {
             
-            attachment.loadItem(forTypeIdentifier: kUTTypeURL as String, options: nil, completionHandler: self.urlDataHandler)
+            print("ATTACHMENT")
+            print(attachment)
             
             attachment.loadItem(forTypeIdentifier: kUTTypeItem as String, options: nil, completionHandler: self.urlDataHandler)
             
@@ -81,7 +96,26 @@ Override this function with the URL Extension of your app.
         if (url != nil) {
             if url?.isFileURL ?? false {
                 do {
-                    shareItem.uri = url?.absoluteString ?? ""
+                    var cleanUrlPath = "share-tmp/"
+                    var tmpUrlPath = url?.path ?? ""
+                    if (tmpUrlPath.first == "/") {
+                        tmpUrlPath.remove(at: tmpUrlPath.startIndex)
+                    }
+                    cleanUrlPath.append(tmpUrlPath)
+                    
+                    let appUrl = self.getAppGroupUrl()
+                    let toPath = appUrl?.appendingPathComponent(cleanUrlPath)
+                    
+                    var uri = url?.absoluteString ?? ""
+                    
+                    do {
+                        try FileManager.default.createDirectory(at: (toPath?.deletingLastPathComponent())!, withIntermediateDirectories: true, attributes: nil)
+                        try FileManager.default.copyItem(at: (url?.absoluteURL)!, to: (toPath?.absoluteURL)!)
+                        
+                        uri = toPath?.absoluteString ?? ""
+                    } catch {}
+                    
+                    shareItem.uri = uri
                     shareItem.mimeType = self.getMimeType(url)
                 }
             } else {

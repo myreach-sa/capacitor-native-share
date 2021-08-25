@@ -29,4 +29,15 @@ import Foundation
         
         return true
     }
+    
+    @objc
+    public static func cleanTemporalFolder(appGroupName: String) -> Void {
+        do {
+            let appUrl = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupName)
+            guard let tmpUrl = appUrl?.appendingPathComponent("share-tmp") else { return  }
+            try FileManager.default.removeItem(at: tmpUrl)
+        } catch {
+            print("Can't clean temporal folder")
+        }
+    }
 }
