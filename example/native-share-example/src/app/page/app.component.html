@@ -1,0 +1,33 @@
+<div
+    *ngIf="somethingShared; else nothingSelected"
+    style="height: 100%; width: 100%;"
+>
+    <div style="width: 100%; height: 3rem; display: flex; align-items: center; justify-content: flex-start; overflow-x: auto;">
+        <button
+            *ngFor="let item of sharedEvent; let idx = index"
+            style="height: 100%; padding: 0px 2rem;"
+            [class.active]="isSelected(idx)"
+            (click)="selectItem(idx)"
+        >
+            {{ idx }}
+        </button>
+    </div>
+
+    <div style="height: 1rem; width: 100%;"></div>
+    
+    <div style="width: 100%; height: calc(100% - 4rem); background-color: #F0F0F0;">
+        <iframe
+            *ngIf="!!currentItemSrc"
+            width="100%"
+            height="100%"
+            [src]="currentItemSrc"
+            frameborder="0"
+        ></iframe>
+    </div>
+</div>
+
+<ng-template #nothingSelected id="current-item">
+    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+        <h1>Please share something.</h1>
+    </div>
+</ng-template>
