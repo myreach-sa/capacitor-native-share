@@ -24,6 +24,8 @@
     "@capacitor/filesystem": "^1.0.2",
     "@capacitor/ios": "^3.1.2",
     "@rea.ch/capacitor-native-share": "file:../..",
+    "@taldor-ltd/angular-file-viewer": "^1.2.1",
+    "ng2-pdf-viewer": "^7.0.2",
     "rxjs": "^7.4.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

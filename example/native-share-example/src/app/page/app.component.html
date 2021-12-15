@@ -14,15 +14,22 @@
     </div>
 
     <div style="height: 1rem; width: 100%;"></div>
-    
+
     <div style="width: 100%; height: calc(100% - 4rem); background-color: #F0F0F0;">
         <iframe
-            *ngIf="!!currentItemSrc"
+            *ngIf="!!currentItemSrc && currentItemIsWebsite"
             width="100%"
             height="100%"
             [src]="currentItemSrc"
             frameborder="0"
         ></iframe>
+
+		<tld-file-viewer
+			*ngIf="!!currentItemSrc && !!fileUrl && !!fileMimetype && !currentItemIsWebsite"
+			[src]="fileUrl"
+			[type]="fileMimetype"
+			style="display: block; width: 100%; height: 100%;"
+		></tld-file-viewer>
     </div>
 </div>
 

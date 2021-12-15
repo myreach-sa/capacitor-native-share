@@ -1441,6 +1441,13 @@
     "@angular-devkit/schematics" "13.1.1"
     jsonc-parser "3.0.0"
 
+"@taldor-ltd/angular-file-viewer@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@taldor-ltd/angular-file-viewer/-/angular-file-viewer-1.2.1.tgz#73be2378ee3a7e5956cb8d30456f1452762705e9"
+  integrity sha512-p0udh6TE7Et9ju5UgrkRMGz0RJz78/Mk5f0HEDdTukmrki59S9MGaoXqr2DEvIoQDISol2ho0jzhXkGhHgBa+g==
+  dependencies:
+    tslib "^1.9.0"
+
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
@@ -4457,6 +4464,14 @@ neo-async@^2.6.2:
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.2.tgz#b4aafb93e3aeb2d8174ca53cf163ab7d7308305f"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
+ng2-pdf-viewer@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/ng2-pdf-viewer/-/ng2-pdf-viewer-7.0.2.tgz#101d43422ae2b1b1b8285faae71a0d9ec241d4b1"
+  integrity sha512-yAd8OddmPCnkERv3IWFyZ1GxkMx+n2fc8NQQtWCjQbhr1sKjrP0TQH41AmgudSzTtvWJw9z784V+TKIaWA0eKw==
+  dependencies:
+    pdfjs-dist "~2.11.338"
+    tslib "^2.0.0"
+
 nice-napi@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/nice-napi/-/nice-napi-1.0.2.tgz#dc0ab5a1eac20ce548802fc5686eaa6bc654927b"
@@ -4850,6 +4865,11 @@ path-type@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
+
+pdfjs-dist@~2.11.338:
+  version "2.11.338"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-2.11.338.tgz#6aafe34b0eb399d358bf899f52838905ddf3b1a5"
+  integrity sha512-Ti5VTB0VvSdtTtc7TG71ghMx0SEuNcEs4ghVuZxW0p6OqLjMc0xekZV1B+MmlxEG2Du2e5jgazucWIG/SXTcdA==
 
 pend@~1.2.0:
   version "1.2.0"

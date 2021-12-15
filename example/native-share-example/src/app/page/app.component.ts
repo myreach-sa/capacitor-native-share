@@ -16,6 +16,7 @@ import {
 	NativeShareItem,
 	NativeShareShareReceived,
 } from '@rea.ch/capacitor-native-share';
+import { AngularFileViewerModule, FileMimeType } from '@taldor-ltd/angular-file-viewer';
 
 @Component({
 	selector: 'app-root',
@@ -29,7 +30,10 @@ export class AppComponent implements OnInit, OnDestroy {
 	public eventData = 'Nothing received';
 
 	public sharedEvent: NativeShareItem[] = [];
+	public fileUrl?: string;
+	public fileMimetype?: FileMimeType;
 	public currentItemSrc?: SafeUrl;
+	public currentItemIsWebsite = false;
 	public selectedIndex?: number;
 
 	public loading = false;
@@ -40,16 +44,18 @@ export class AppComponent implements OnInit, OnDestroy {
 
 	private listener?: PluginListenerHandle;
 
-	private fileUrl?: string;
-
-	constructor(private readonly cdRef: ChangeDetectorRef, private readonly ngZone: NgZone, private sanitizer: DomSanitizer) {}
+	constructor(
+		private readonly cdRef: ChangeDetectorRef,
+		private readonly ngZone: NgZone,
+		private sanitizer: DomSanitizer
+	) {}
 
 	async ngOnInit(): Promise<void> {
-		this.addToLog('onInit')
+		this.addToLog('onInit');
 
 		NativeShare.getLastSharedItems()
 			.then((ev) => {
-				this.addToLog("getLastSharedItems");
+				this.addToLog('getLastSharedItems');
 				this.handleShare(ev);
 			})
 			.catch((error) => {
@@ -106,7 +112,12 @@ export class AppComponent implements OnInit, OnDestroy {
 	private handleShare(event: NativeShareShareReceived): void {
 		this.ngZone.run(() => {
 			try {
-				this.processShare(Object.values(event.items).filter(({text, uri, mimeType}) => `${text}${uri}${mimeType}` !== ''));
+				console.log('handleShare', event);
+				this.processShare(
+					Object.values(event.items).filter(
+						({ text, uri, mimeType }) => `${text}${uri}${mimeType}` !== ''
+					)
+				);
 			} catch (error) {
 				console.error('handleShare', error);
 			}
@@ -128,20 +139,23 @@ export class AppComponent implements OnInit, OnDestroy {
 
 	private async handleItemSelection(item: NativeShareItem): Promise<void> {
 		try {
-			const isFile = item.uri || '' !== '';
-			const src = isFile ? Capacitor.convertFileSrc(item.uri) : item.text;
+			this.currentItemIsWebsite = !((item.uri || '') !== '');
+			const src = !this.currentItemIsWebsite
+				? Capacitor.convertFileSrc(item.uri)
+				: item.text;
 
-			console.log({isFile, src});
+			console.log({ isFile: !this.currentItemIsWebsite, src });
 
-			if (isFile) {
-				const response = await fetch(src);
-				const blob = await response.blob();
-				const file = new File([blob], 'test', { type: item.mimeType });
+			if (!this.currentItemIsWebsite) {
+				// const response = await fetch(src);
+				// const blob = await response.blob();
+				// const file = new File([blob], 'test', { type: item.mimeType });
 
-				console.log(file);
-
-				this.fileUrl = URL.createObjectURL(file);
-				this.currentItemSrc = this.sanitizer.bypassSecurityTrustResourceUrl(this.fileUrl);
+				this.fileUrl = src;
+				this.fileMimetype = item.mimeType as FileMimeType;
+				this.currentItemSrc = this.sanitizer.bypassSecurityTrustResourceUrl(
+					this.fileUrl
+				);
 
 				console.log(this.fileUrl);
 				console.log(this.currentItemSrc);
@@ -160,7 +174,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 @NgModule({
 	declarations: [AppComponent],
-	imports: [CommonModule],
+	imports: [CommonModule, AngularFileViewerModule],
 	exports: [AppComponent],
 })
 export class AppPageModule {}
