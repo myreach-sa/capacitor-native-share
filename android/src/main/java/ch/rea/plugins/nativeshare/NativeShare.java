@@ -8,6 +8,8 @@ import android.net.Uri;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 public class NativeShare {
@@ -17,6 +19,11 @@ public class NativeShare {
         Uri uri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
 
 		String uriStr = uri != null ? uri.toString() : "";
+
+		try {
+			uriStr = URLDecoder.decode(uriStr, "UTF-8");
+		} catch (UnsupportedEncodingException ignored) {}
+
 		String textStr = text != null ? text : "";
 
 		String mimeType = NativeShare.mimeTypeFromURI(context, uriStr);
@@ -36,7 +43,11 @@ public class NativeShare {
 
         for (int i = 0; i < size; i++) {
             Uri uri = uriList.get(i);
-            String uriStr = uri != null ? uri.toString() : "";
+			String uriStr = uri != null ? uri.toString() : "";
+
+			try {
+				uriStr = URLDecoder.decode(uriStr, "UTF-8");
+			} catch (UnsupportedEncodingException ignored) {}
 
 			String mimeType = NativeShare.mimeTypeFromURI(context, uriStr);
 

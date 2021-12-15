@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { createOfflineCompileUrlResolver } from '@angular/compiler';
 import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,
@@ -133,7 +132,7 @@ export class AppComponent implements OnInit, OnDestroy {
 			const src = isFile ? Capacitor.convertFileSrc(item.uri) : item.text;
 
 			console.log({isFile, src});
-			
+
 			if (isFile) {
 				const response = await fetch(src);
 				const blob = await response.blob();
@@ -143,14 +142,14 @@ export class AppComponent implements OnInit, OnDestroy {
 
 				this.fileUrl = URL.createObjectURL(file);
 				this.currentItemSrc = this.sanitizer.bypassSecurityTrustResourceUrl(this.fileUrl);
-				
+
 				console.log(this.fileUrl);
 				console.log(this.currentItemSrc);
 			} else {
 				this.currentItemSrc = this.sanitizer.bypassSecurityTrustResourceUrl(src);
 			}
 		} catch (error) {
-			console.error('handleItemSelection', JSON.stringify(error));	
+			console.error('handleItemSelection', JSON.stringify(error));
 		}
 
 		this.loading = false;
