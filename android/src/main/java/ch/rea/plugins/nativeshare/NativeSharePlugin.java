@@ -6,34 +6,35 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-
 import org.json.JSONException;
 
 @CapacitorPlugin(name = "NativeShare")
 public class NativeSharePlugin extends Plugin {
 
-	private JSObject lastSharedItems = null;
+    private JSObject lastSharedItems = null;
 
-	@PluginMethod()
-	public void getLastSharedItems(PluginCall call) {
-		if (this.lastSharedItems != null) {
-			JSObject options = call.getObject("options");
-			boolean autoremove = false;
-			try {
-				autoremove = options.getBoolean("autoremove");
-			} catch (JSONException ignored) {}
+    @PluginMethod
+    public void getLastSharedItems(PluginCall call) {
+        if (this.lastSharedItems != null) {
+            JSObject options = call.getObject("options");
+            boolean autoremove = false;
+            try {
+                if (options != null) {
+                    autoremove = options.getBoolean("autoremove");
+                }
+            } catch (JSONException ignored) {}
 
-			if (autoremove) {
-				this.lastSharedItems = null;
-			}
+            if (autoremove) {
+                this.lastSharedItems = null;
+            }
 
-			call.resolve(this.lastSharedItems);
-		} else {
-			call.reject("No shared detected");
-		}
-	}
+            call.resolve(this.lastSharedItems);
+        } else {
+            call.reject("No shared detected");
+        }
+    }
 
-    @PluginMethod()
+    @PluginMethod
     public void clear(PluginCall call) {
         this.lastSharedItems = null;
         call.resolve(new JSObject());
@@ -53,13 +54,13 @@ public class NativeSharePlugin extends Plugin {
     }
 
     protected void notifyEvent(JSObject[] items) {
-		int length = items.length;
+        int length = items.length;
         JSObject notification = new JSObject();
         JSObject itemsSend = new JSObject();
-		for (int i = 0; i < length; i++) {
-			itemsSend.put("" + i, items[i]);
-		}
-		notification.put("length", length);
+        for (int i = 0; i < length; i++) {
+            itemsSend.put("" + i, items[i]);
+        }
+        notification.put("length", length);
         notification.put("items", itemsSend);
         notifyListeners("sharedReceived", notification);
 
