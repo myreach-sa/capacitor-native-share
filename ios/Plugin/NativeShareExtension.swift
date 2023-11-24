@@ -64,7 +64,7 @@ Override this function with the URL Extension of your app.
                             } else if attachment.hasItemConformingToTypeIdentifier(kUTTypeItem as String) {
                                 print("ATTACHMENT CONFORMS TO ITEM")
                                 taskGroup.addTask {
-                                    return try await self.itemDataHandler(index, attachment)
+                                    return try await self.itemDataHandler(attachment)
                                 }
                             }
                     }
@@ -91,12 +91,12 @@ Override this function with the URL Extension of your app.
         return false
     }
 
-    open func itemDataHandler(_ index: Int,_ attachment: NSItemProvider) async throws -> NativeShareItem {
+    open func itemDataHandler(_ attachment: NSItemProvider) async throws -> NativeShareItem {
         let results = try await attachment.loadItem(forTypeIdentifier: kUTTypeItem as String, options: nil)
         let shareItem = NativeShareItem()
         let url = results as! URL?
 
-        self.handleUrlData(url, shareItem, index)
+        self.handleUrlData(url, shareItem)
 
         return shareItem
     }
@@ -124,12 +124,12 @@ Override this function with the URL Extension of your app.
         shareItem.text = text ?? ""
     }
 
-     open func handleUrlData(_ url: URL?, _ shareItem: NativeShareItem, _ index: Int?) -> Void {
+     open func handleUrlData(_ url: URL?, _ shareItem: NativeShareItem) -> Void {
         if (url != nil) {
             if (url?.isFileURL ?? false) {
                 do {
-                    shareItem.uri = self.createSharedFileUrl(url) index
- ,                   shareItem.mimeType = self.getMimeType(url)   
+                    shareItem.uri = self.createSharedFileUrl(url)
+                    shareItem.mimeType = self.getMimeType(url)   
                 } catch {
                     print("Error while getting file data")
                 }
@@ -152,7 +152,7 @@ Override this function with the URL Extension of your app.
         return "application/octet-stream"
     }
     
-    fileprivate func createSharedFileUrl(_ url: URL?, _ index: Int?) -> String {
+    fileprivate func createSharedFileUrl(_ url: URL?) -> String {
         let fileManager = FileManager.default
         
         let copyFileUrl = fileManager.containerURL(forSecurityApplicationGroupIdentifier: self.getAppGroupIdentifier())!
