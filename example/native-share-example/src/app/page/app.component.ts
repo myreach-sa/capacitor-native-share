@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { createOfflineCompileUrlResolver } from '@angular/compiler';
 import {
 	ChangeDetectionStrategy,
 	ChangeDetectorRef,

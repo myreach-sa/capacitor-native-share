@@ -25,8 +25,13 @@ Override this function with the URL Extension of your app.
         return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: self.getAppGroupIdentifier())
     }
 
-    open override func didSelectPost() {
-        let containerAppUrlExtension: String = self.getContainerAppUrlExtension()
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+    }
+
+    private func sendData() {
+        var containerAppUrlExtension: String = self.getContainerAppUrlExtension()
         var urlString: String = containerAppUrlExtension + "://?"
         self.items.forEach { item in
             urlString = item.addItemsToString(urlString)
@@ -34,34 +39,48 @@ Override this function with the URL Extension of your app.
 
         print(urlString)
 
-        let url = URL(string: urlString)!
-        _ = openURL(url)
-        self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+        var url = URL(string: urlString)!
+        openURL(url)
     }
 
     open override func viewDidLoad() {
-        print("BEFORE SUPER VIEWDIDLOAD")
         super.viewDidLoad()
-        print("AFTER SUPER VIEWDIDLOAD")
 
         let attachments = (self.extensionContext?.inputItems.first as? NSExtensionItem)?.attachments ?? []
 
-        print("ATTACHMENTS")
-        print(attachments as Any)
+        Task {
+            try await withThrowingTaskGroup(
+                of: NativeShareItem.self,
+                body: { taskGroup in
+                    for (index, attachment) in attachments.enumerated() {
+                        print("ATTACHMENT \(index)")
 
-        for attachment in attachments {
+                           if attachment.hasItemConformingToTypeIdentifier(kUTTypeURL as String) {
+                                print("ATTACHMENT CONFORMS TO URL")
+                                taskGroup.addTask {
+                                    return try await self.urlDataHandler(attachment)
+                                }
+                            } else if attachment.hasItemConformingToTypeIdentifier(kUTTypeText as String) {
+                                print("ATTACHMENT CONFORMS TO TEXT")
+                                taskGroup.addTask {
+                                    return try await self.textDataHandler(attachment)
+                                }
+                            } else if attachment.hasItemConformingToTypeIdentifier(kUTTypeItem as String) {
+                                print("ATTACHMENT CONFORMS TO ITEM")
+                                taskGroup.addTask {
+                                    return try await self.itemDataHandler(attachment)
+                                }
+                            }
+                    }
 
-            print("ATTACHMENT")
-            print(attachment)
+                    for try await shareItem in taskGroup {
+                        self.items.append(shareItem)
+                    }
+                }
+            )
 
-            attachment.loadItem(forTypeIdentifier: kUTTypeURL as String, options: nil, completionHandler: self.urlDataHandler)
-
-            attachment.loadItem(forTypeIdentifier: kUTTypeText as String, options: nil, completionHandler:self.textDataHandler)
-
+            self.sendData()
         }
-
-        Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(self.didSelectPost), userInfo: nil, repeats: false)
-
     }
 
     @objc open func openURL(_ url: URL) -> Bool {
@@ -75,62 +94,55 @@ Override this function with the URL Extension of your app.
         return false
     }
 
-    open func urlDataHandler(_ item: NSSecureCoding?, _ error: Error?) -> Void {
-        if (item != nil) {
-            let shareItem = NativeShareItem()
-            self.handleUrlData(item as? NSURL, shareItem)
-            self.items.append(shareItem)
-        }
+    open func itemDataHandler(_ attachment: NSItemProvider) async throws -> NativeShareItem {
+        let results = try await attachment.loadItem(forTypeIdentifier: kUTTypeItem as String, options: nil)
+        let shareItem = NativeShareItem()
+        let url = results as! URL?
+
+        self.handleUrlData(url, shareItem)
+
+        return shareItem
     }
 
-    open func textDataHandler(_ item: NSSecureCoding?, _ error: Error?) -> Void {
-        if (item != nil) {
-            let shareItem = NativeShareItem()
-            self.handleTextData(item as? NSString, shareItem)
-            self.handleUrlData(item as? NSURL, shareItem)
-            self.items.append(shareItem)
-        }
+    open func urlDataHandler(_ attachment: NSItemProvider) async throws -> NativeShareItem {
+        let results = try await attachment.loadItem(forTypeIdentifier: kUTTypeURL as String, options: nil)
+        let shareItem = NativeShareItem()
+        let url = results as! URL?
+
+        self.handleUrlData(url, shareItem)
+
+        return shareItem
     }
 
-    open func handleUrlData(_ url: NSURL?, _ shareItem: NativeShareItem) -> Void {
+    open func textDataHandler(_ attachment: NSItemProvider) async throws -> NativeShareItem {
+        let results = try await attachment.loadItem(forTypeIdentifier: kUTTypeText as String, options: nil)
+        let shareItem = NativeShareItem()
+
+        self.handleTextData(results as! String, shareItem)
+
+        return shareItem
+    }
+
+    open func handleTextData(_ text: String?, _ shareItem: NativeShareItem) -> Void {
+        shareItem.text = text ?? ""
+    }
+
+     open func handleUrlData(_ url: URL?, _ shareItem: NativeShareItem) -> Void {
         if (url != nil) {
-            if url?.isFileURL ?? false {
+            if (url?.isFileURL ?? false) {
                 do {
-                    var cleanUrlPath = "share-tmp/"
-                    var tmpUrlPath = url?.path ?? ""
-                    if (tmpUrlPath.first == "/") {
-                        tmpUrlPath.remove(at: tmpUrlPath.startIndex)
-                    }
-                    cleanUrlPath.append(tmpUrlPath)
-
-                    let appUrl = self.getAppGroupUrl()
-                    let toPath = appUrl?.appendingPathComponent(cleanUrlPath)
-
-                    var uri = url?.absoluteString ?? ""
-
-                    do {
-                        try FileManager.default.createDirectory(at: (toPath?.deletingLastPathComponent())!, withIntermediateDirectories: true, attributes: nil)
-                        try FileManager.default.copyItem(at: (url?.absoluteURL)!, to: (toPath?.absoluteURL)!)
-
-                        uri = toPath?.absoluteString ?? ""
-                    } catch {}
-
-                    shareItem.uri = uri
-                    shareItem.mimeType = self.getMimeType(url)
+                    shareItem.uri = self.createSharedFileUrl(url)
+                    shareItem.mimeType = self.getMimeType(url)   
+                } catch {
+                    print("Error while getting file data")
                 }
             } else {
                 shareItem.text = url?.absoluteString ?? ""
             }
         }
-    }
+     }
 
-    open func handleTextData(_ text: NSString?, _ shareItem: NativeShareItem) -> Void {
-        if (text != nil) {
-            shareItem.text = text as String? ?? ""
-        }
-    }
-
-    open func getMimeType(_ url: NSURL?) -> String {
+    open func getMimeType(_ url: URL?) -> String {
         if (url == nil) {
             return ""
         }
@@ -141,5 +153,16 @@ Override this function with the URL Extension of your app.
             }
         }
         return "application/octet-stream"
+    }
+    
+    fileprivate func createSharedFileUrl(_ url: URL?) -> String {
+        let fileManager = FileManager.default
+        
+        let copyFileUrl = fileManager.containerURL(forSecurityApplicationGroupIdentifier: self.getAppGroupIdentifier())!
+            .absoluteString.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)! + url!
+            .lastPathComponent.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        try? Data(contentsOf: url!).write(to: URL(string: copyFileUrl)!)
+        
+        return copyFileUrl
     }
 }
