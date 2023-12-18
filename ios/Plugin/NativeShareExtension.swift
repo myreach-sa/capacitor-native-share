@@ -25,8 +25,13 @@ Override this function with the URL Extension of your app.
         return FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: self.getAppGroupIdentifier())
     }
 
-    open override func didSelectPost() {
-        let containerAppUrlExtension: String = self.getContainerAppUrlExtension()
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+    }
+
+    private func sendData() {
+        var containerAppUrlExtension: String = self.getContainerAppUrlExtension()
         var urlString: String = containerAppUrlExtension + "://?"
         self.items.forEach { item in
             urlString = item.addItemsToString(urlString)
@@ -34,9 +39,8 @@ Override this function with the URL Extension of your app.
 
         print(urlString)
 
-        let url = URL(string: urlString)!
-        _ = openURL(url)
-        self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+        var url = URL(string: urlString)!
+        openURL(url)
     }
 
     open override func viewDidLoad() {
@@ -74,10 +78,9 @@ Override this function with the URL Extension of your app.
                     }
                 }
             )
+
+            self.sendData()
         }
-
-        Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(self.didSelectPost), userInfo: nil, repeats: false)
-
     }
 
     @objc open func openURL(_ url: URL) -> Bool {
